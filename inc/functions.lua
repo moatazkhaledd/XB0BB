@@ -1,10 +1,12 @@
 --[[
-▇▇▇                                       ▇▇▇               
-▇▇        ▇                        ▇       ▇▇             
-▇▇          ▇ @VV_0M   ▇         ▇▇            
-▇▇             ▇             ▇             ▇▇        Dev : MOATAZ KHALED
-▇▇                ▇       ▇                ▇▇      
-▇▇                   ▇▇                    ▇▇     Source Milan BY @XB0BB
+#    ▀█████████▄   ▄██████▄     ▄████████    ▄████████
+#      ███    ███ ███    ███   ███    ███   ███    ███
+#      ███    ███ ███    ███   ███    █▀    ███    █▀
+#     ▄███▄▄▄██▀  ███    ███   ███          ███
+#    ▀▀███▀▀▀██▄  ███    ███ ▀███████████ ▀███████████ ꒐ Dev : @XB0BB
+#      ███    ██▄ ███    ███          ███          ███ ꒐ Dev : @XB0BB
+#      ███    ███ ███    ███    ▄█    ███    ▄█    ███
+#    ▄█████████▀   ▀██████▀   ▄████████▀   ▄████████▀  ꒐ Source Milan BY @XB0BB
 #---------------------------------------------------------------------
 ]]
 
@@ -28,6 +30,600 @@ function sleep(time)
 local untime = clock()
 while clock() - untime <= time do end
 end
+
+function UpdateNewQuery(data)
+msg = {} 
+local TextCmdquery = data.payload_.data_ 
+local UserID = data.sender_user_id_
+local ChatID = data.chat_id_
+local dataid = data.message_id_
+msg = data
+
+if TextCmdquery == "GroupSitting" then
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم , ارجو المعذرة ❤️",true) end
+return UpdateGropSitting(msg)
+elseif TextCmdquery == "MediaSitting" then
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم , ارجو المعذرة ❤️",true) end
+return UpdateMediaSitting(msg)
+elseif TextCmdquery == "OtherSetting" then
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم , ارجو المعذرة ❤️",true) end
+return UpdateOtherSitting(msg)
+elseif TextCmdquery == "List1" then
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم , ارجو المعذرة ❤️",true) end
+return UpdateM1Query(msg)
+elseif TextCmdquery == "List2" then
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم , ارجو المعذرة ❤️",true) end
+return UpdateM2Query(msg)
+elseif TextCmdquery == "List3" then
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم , ارجو المعذرة ❤️",true) end
+return UpdateM3Query(msg)
+elseif TextCmdquery == "List4" then
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم , ارجو المعذرة ❤️",true) end
+return UpdateM4Query(msg)
+elseif TextCmdquery == "CmdSudo" then
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم , ارجو المعذرة ❤️",true) end
+return UpdateM5Query(msg)
+elseif TextCmdquery == "CmdFiles" then
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم , ارجو المعذرة ❤️",true) end
+return UpdateM6Query(msg)
+elseif TextCmdquery == "LoginOut" then
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم , ارجو المعذرة ❤️",true) end
+msg.Delete = true
+msg.textmsg = "- تم اخفاء قائمة الاوامر"
+msg.Editeinline = true
+return SendMsgInline(msg)
+elseif TextCmdquery == "CmdBack" then
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم الادمن , ارجو المعذرة ❤️",true) end
+msg.textmsg = [[ للاستفسار - []]..SUDO_USER..[[]
+➖➖➖
+
+- قائمه الاوامر 
+- م1 ( اوامر الإداره)
+- م2 ( اوامر إعدادات المجموعه )
+- م3 ( اوامر الحمايه ) 
+- م المطور ( اوامر المطور ) 
+- اوامر الرد ( لإضافه رد معين )
+- اوامر الملفات ( للتحكم بالملفات ) 
+
+➖➖➖]]
+msg.KeyboardCmd = keyboardCmd
+msg.Editeinline = true
+return SendMsgInline(msg)
+elseif TextCmdquery == "CmdBack1" then
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم الادمن , ارجو المعذرة ❤️",true) end
+msg.textmsg = [[ للاستفسار - []]..SUDO_USER..[[]
+➖➖➖
+
+- قائمه الاوامر 
+- م1 ( اوامر الإداره)
+- م2 ( اوامر إعدادات المجموعه )
+- م3 ( اوامر الحمايه ) 
+- م المطور ( اوامر المطور ) 
+- اوامر الرد ( لإضافه رد معين )
+- اوامر الملفات ( للتحكم بالملفات ) 
+
+➖➖➖]]
+msg.KeyboardCmd = keyboardSitting
+msg.Editeinline = true
+return SendMsgInline(msg)
+end
+
+--=================================================================================
+local TextCmd,CmdSitting = TextCmdquery:match("^(Sitting[123])#([%a%d_:]+)$")
+print(CmdSitting)
+if CmdSitting then
+local ResRedis =  redis:del(boss..CmdSitting..msg.chat_id_)
+if TextCmd == "Sitting3" then 
+if (CmdSitting == "antiedit") and not Get_Rtb(msg,"SuperCreator") then return  answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم فقط للمنشئ الاساسي , ارجو المعذرة ❤️",true) end
+if (CmdSitting == "lock_linkk" or CmdSitting == "lock_takkl" or CmdSitting == "lock_leftgroup" or CmdSitting == "lock_KickBan") and not Get_Rtb(msg,"Creator") then
+return  answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم فقط للمنشئ , ارجو المعذرة ❤️",true) end
+if (CmdSitting == "lock_RandomRdod" or CmdSitting == "lock_rdodSource" or CmdSitting == "lock_cleaner" or CmdSitting == "idphoto") and not Get_Rtb(msg,"Director") then
+return  answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم فقط للمدير , ارجو المعذرة ❤️",true) end
+end      
+if not CheckUserAdmin(msg) then return answerCallbackQuery(data.id_,"ليس لديك صلاحية التحكم الادمن , ارجو المعذرة ❤️",true) end
+if ResRedis == 0 then redis:set(boss..CmdSitting..msg.chat_id_,true) end
+if TextCmd == "Sitting1" then 
+UpdateGropSitting(msg)
+elseif TextCmd == "Sitting2" then 
+UpdateMediaSitting(msg)
+elseif TextCmd == "Sitting3" then 
+UpdateOtherSitting(msg)
+end
+return false
+end
+--=================================================================================
+local Text,UserJoin = TextCmdquery:match("^(CheckRobotJoin:)(%d+)$")
+local UserJoin = tonumber(UserJoin)
+if Text == "CheckRobotJoin:" then
+if CheckUserAdmin(msg) or UserID == UserJoin then
+Restrict(ChatID,UserJoin,2)
+EditMsg(ChatID,dataid,"- تم فك التقييد بنجاح والتاكد بانك لست روبوت ❤️")
+answerCallbackQuery(data.id_,"- تم فك التقييد بنجاح والتاكد بانك لست روبوت ❤️",true)
+else
+answerCallbackQuery(data.id_,"عذرا انت لست الشخص المقيد او لا يوجد لديك صلاحيه الادارة , نعتذر منك",true)	
+end
+end
+end
+
+keyboardCmd = [[{
+"inline_keyboard": [
+[{"text": "م1","callback_data": "List1"},{"text": "م2","callback_data": "List2"}],
+[{"text": "م3","callback_data": "List3"},{"text": "اوامر الردود","callback_data": "List4"}],
+[{"text": "اوامر المطور","callback_data": "CmdSudo"},{"text": "اوامر الملفات","callback_data": "CmdFiles"}],
+[{"text": "- اخفاء الامر","callback_data": "LoginOut"}]
+]}
+]]
+
+
+keyboardSitting = [[{"inline_keyboard": [
+[{"text": "- اعدادات المجموعة","callback_data": "GroupSitting"},{"text": "- اعدادات الوسائط","callback_data": "MediaSitting"}],
+[{"text": "- اعدادات اخرى","callback_data": "OtherSetting"},{"text": "- اخفاء الامر","callback_data": "LoginOut"}]
+]}
+]]
+
+
+
+--================================{{  SendinlineCmd  }} ===================================
+
+function SendMsgInline(msg)
+if msg.Editeinline then 
+Method = ApiToken.."/editMessageText"
+Edite  = "&message_id="..msg.message_id_/2097152/0.5
+else 
+Method = ApiToken.."/sendMessage" 
+Edite  = "&reply_to_message_id="..msg.id_/2097152/0.5
+end
+if msg.Delete then 
+RApi = "&parse_mode=markdown&disable_web_page_preview=true"
+else
+RApi = "&parse_mode=markdown&disable_web_page_preview=true&reply_markup="..URL.escape(msg.KeyboardCmd)
+end
+rr,res=https.request(Method..'?chat_id='..msg.chat_id_..'&text='..URL.escape(msg.textmsg)..Edite..RApi)
+if res == 200 then return false end
+print(rr)
+end
+
+function UpdateM1Query(msg)
+list_settings = '{"inline_keyboard": ['
+..'[{"text": "- رجوع »","callback_data": "CmdBack"},{"text": "- اخفاء الامر","callback_data": "LoginOut"}]'
+..']}'
+msg.KeyboardCmd = list_settings
+textMD = [[- اهلا بك في قائمة اوامر الاداريين
+
+﹎﹎﹎﹎﹎اوامر الرفع والتنزيل﹎﹎﹎﹎﹎
+- رفع - تنزيل منشى اساسي
+- رفع - تنزيل مشرف
+- رفع - تنزيل منشى
+- رفع - تنزيل مدير
+- رفع - تنزيل ادمن
+- رفع - تنزيل مميز
+- تنزيل الكل - لازاله جميع الرتب اعلاه
+
+﹎﹎﹎﹎﹎اوامر المسح﹎﹎﹎﹎﹎
+- مسح المنشئين الاساسيين
+- مسح المنشئين
+- مسح المدراء
+- مسح الادمنيه
+- مسح المميزين
+- مسح المحظورين
+- مسح المكتومين
+- مسح قائمه العام
+- مسح قائمه المنع
+- مسح الردود العامه
+- مسح الردود
+- مسح الاوامر
+- مسح + عدد
+- مسح بالرد
+- مسح ايدي عام
+- مسح كليشه الايدي
+- مسح كليشه الستارت
+- مسح الترحيب
+- مسح الرابط
+- مسح كلايش التعليمات
+
+﹎﹎﹎﹎﹎اوامر الطرد الحظر الكتم﹎﹎﹎﹎﹎
+- حظر - بالرد،بالمعرف،بالايدي
+- طرد - بالرد،بالمعرف،بالايدي 
+- كتم - بالرد،بالمعرف،بالايدي
+- تقيد - بالرد،بالمعرف،بالايدي
+- الغاء الحظر - بالرد،بالمعرف،بالايدي
+- الغاء الكتم - بالرد،بالمعرف،بالايدي
+- فك التقييد - بالرد،بالمعرف،بالايدي
+- رفع القيود - لحذف ↜ كتم،حظر،حظر عام،تقييد
+- منع + الكلمه
+- الغاء منع + الكلمه
+- طرد البوتات
+- طرد المحذوفين
+- كشف البوتات]]
+GetUserID(msg.sender_user_id_,function(arg,data)
+msg = arg.msg
+local textD = redis:get(boss..":awamer_Klesha_m1:")
+if textD then
+textD = Flter_Markdown(convert_Klmat(msg,data,textD,true))
+else
+textD = textMD
+end
+msg.textmsg = textD
+msg.Editeinline = true
+return SendMsgInline(msg)
+end,{msg=msg})
+return false
+end
+function UpdateM2Query(msg)
+list_settings = '{"inline_keyboard": ['
+..'[{"text": "- رجوع »","callback_data": "CmdBack"},{"text": "- اخفاء الامر","callback_data": "LoginOut"}]'
+..']}'
+msg.KeyboardCmd = list_settings
+textMD = [[
+- اهلا بك في قائمة اوامر المجموعه
+
+﹎﹎﹎﹎اوامر الوضع ﹎﹎﹎﹎
+- ضع الترحيب
+- ضع القوانين
+- ضع وصف
+- ضـع رابط
+- اضف امر
+- اضف رد عام
+- تعيين ايدي عام
+- تعيين كليشه الايدي
+
+﹎﹎﹎﹎اوامر رؤية الاعدادات﹎﹎﹎﹎
+- المطورين
+- المنشئين الاساسيين
+- المنشئين 
+- الادمنيه
+- المدراء
+- المميزين
+- المحظورين
+- القوانين
+- المكتومين
+- المطور 
+- معلوماتي 
+- الحمايه  
+- الوسائط
+- الاعدادت
+- المجموعه 
+]]
+GetUserID(msg.sender_user_id_,function(arg,data)
+msg = arg.msg
+local textD = redis:get(boss..":awamer_Klesha_m2:")
+if textD then
+textD = Flter_Markdown(convert_Klmat(msg,data,textD,true))
+else
+textD = textMD
+end
+msg.textmsg = textD
+msg.Editeinline = true
+return SendMsgInline(msg)
+end,{msg=msg})
+return false
+end
+
+function UpdateM3Query(msg)
+list_settings = '{"inline_keyboard": ['
+..'[{"text": "- رجوع »","callback_data": "CmdBack"},{"text": "- اخفاء الامر","callback_data": "LoginOut"}]'
+..']}'
+msg.KeyboardCmd = list_settings
+textMD = [[
+- اهلا بك في قائمة الحماية
+
+﹎﹎﹎ اوامر القفل والفتح بالمسح ﹎﹎﹎
+- قفل - فتح التعديل  
+-️ قفل - فتح البصمات 
+- قفل - فتح الفيديو 
+- قفل - فتح الـصــور 
+- قفل - فتح الملصقات 
+- قفل - فتح المتحركه 
+
+- قفل - فتح الدردشه 
+- قفل - فتح الروابط 
+- قفل - فتح التاك 
+- قفل - فتح البوتات 
+- ️قفل - فتح المعرفات 
+- قفل - فتح البوتات بالطرد 
+
+- قفل - فتح الكلايش 
+-️ قفل - فتح التكرار 
+- قفل - فتح التوجيه 
+- قفل - فتح الانلاين 
+- قفل - فتح الجهات 
+- قفل - فتح الــكـــل 
+
+- قفل - فتح الفشار
+- قفل - فتح الفارسيه
+- قفل - فتح الانكليزيه
+- قفل - فتح الاضافه
+- قفل - فتح الصوت
+- قفل - فتح الالعاب
+- قفل - فتح الماركدوان
+- قفل - فتح الويب
+
+﹎﹎﹎﹎اوامر الفتح والقفل بالتقييد﹎﹎﹎
+- قفل - فتح التوجيه بالتقييد 
+- قفل - فتح الروابط بالتقييد 
+- قفل - فتح المتحركه بالتقييد 
+- قفل - فتح الصور بالتقييد 
+- قفل - فتح الفيديو بالتقييد 
+
+﹎﹎﹎﹎اوامر التفعيل والتعطيل ﹎﹎﹎﹎
+- تفعيل - تعطيل الترحيب 
+- تفعيل - تعطيل الردود 
+- تفعيل - تعطيل التحذير 
+- تفعيل - تعطيل الايدي
+- تفعيل - تعطيل الرابط
+- تفعيل - تعطيل المغادره
+- تفعيل - تعطيل الحظر
+- تفعيل - تعطيل الحمايه
+- تفعيل - تعطيل تاك للكل
+- تفعيل - تعطيل الايدي بالصوره
+- تفعيل - تعطيل التحقق 
+- تفعيل - تعطيل ردود السورس 
+- تفعيل - تعطيل التنظيف التلقائي 
+
+]]
+GetUserID(msg.sender_user_id_,function(arg,data)
+msg = arg.msg
+local textD = redis:get(boss..":awamer_Klesha_m3:")
+if textD then
+textD = Flter_Markdown(convert_Klmat(msg,data,textD,true))
+else
+textD = textMD
+end
+msg.textmsg = textD
+msg.Editeinline = true
+return SendMsgInline(msg)
+end,{msg=msg})
+return false
+end
+
+
+function UpdateM4Query(msg)
+list_settings = '{"inline_keyboard": ['
+..'[{"text": "- رجوع »","callback_data": "CmdBack"},{"text": "- اخفاء الامر","callback_data": "LoginOut"}]'
+..']}'
+msg.KeyboardCmd = list_settings
+textMD = [[
+- اهلا بك في قائمة اوامر الردود
+
+
+-  جميع اوامر الردود 
+- الردود : لعرض الردود المثبته
+-  اضف رد : لاضافه رد جديد
+- مسح رد  الرد المراد مسحه
+- مسح الردود : لمسح كل الردود
+-  اضف رد عام : لاضافه رد لكل المجموعات
+-  مسح رد عام : لمسح الرد العام 
+- مسح الردود العامه : لمسح كل ردود العامه 
+]]
+GetUserID(msg.sender_user_id_,function(arg,data)
+msg = arg.msg
+local textD = redis:get(boss..":awamer_Klesha_mrd:")
+if textD then
+textD = Flter_Markdown(convert_Klmat(msg,data,textD,true))
+else
+textD = textMD
+end
+msg.textmsg = textD
+msg.Editeinline = true
+return SendMsgInline(msg)
+end,{msg=msg})
+return false
+end
+
+function UpdateM5Query(msg)
+list_settings = '{"inline_keyboard": ['
+..'[{"text": "- رجوع »","callback_data": "CmdBack"},{"text": "- اخفاء الامر","callback_data": "LoginOut"}]'
+..']}'
+msg.KeyboardCmd = list_settings
+textMD = [[ - اهلا بك في قائمة اوامر المطورين
+
+- تفعيل
+- تعطيل
+- اسم بوتك + غادر
+- مسح الادمنيه
+- مسح المميزين
+- مسح المدراء
+- مسح المطورين
+- مسح المنشئين
+- مسح المنشئين الاساسيين
+- مسح كلايش التعليمات
+- اذاعه
+- اذاعه خاص
+- اذاعه عام
+- اذاعه بالتثبيت
+- اذاعه عام بالتوجيه
+- تعيين قائمه الاوامر
+- مسح كلايش التعليمات
+- تعيين كليشه ستارت
+- تعيين ايدي عام
+- مسح ايدي عام
+- تفعيل / تعطيل تعيين الايدي
+- تحديث
+- تحديث السورس ]]
+GetUserID(msg.sender_user_id_,function(arg,data)
+msg = arg.msg
+local textD = redis:get(boss..":awamer_Klesha_mtwr:")
+if textD then
+textD = Flter_Markdown(convert_Klmat(msg,data,textD,true))
+else
+textD = textMD
+end
+msg.textmsg = textD
+msg.Editeinline = true
+return SendMsgInline(msg)
+end,{msg=msg})
+return false
+end
+
+function UpdateM6Query(msg)
+list_settings = '{"inline_keyboard": ['
+..'[{"text": "- رجوع »","callback_data": "CmdBack"},{"text": "- اخفاء الامر","callback_data": "LoginOut"}]'
+..']}'
+msg.KeyboardCmd = list_settings
+textMD = [[ - اهلا بك في قائمة اوامر الملفات
+
+- اوامر الملفات
+
+-  `/files`  لعرض قائمه الملفات 
+-  `/store`  لعرض متجر الملفات 
+-  `sp file.lua`   تثبيت الملف 
+-  `dp file.lua`  الملف المراد حذفه ]]
+GetUserID(msg.sender_user_id_,function(arg,data)
+msg = arg.msg
+local textD = redis:get(boss..":awamer_Klesha_mf:")
+if textD then
+textD = Flter_Markdown(convert_Klmat(msg,data,textD,true))
+else
+textD = textMD
+end
+msg.textmsg = textD
+msg.Editeinline = true
+return SendMsgInline(msg)
+end,{msg=msg})
+return false
+end
+
+function UpdateGropSitting(msg)
+list_settings = '{"inline_keyboard": ['
+..'[{"text": " التعديل » '..(redis:get(boss..'lock_edit'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_edit"},'
+..'{"text": " الروابط » '..(redis:get(boss..'lock_link'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_link"}],'
+
+..'[{"text": " التاك » '..(redis:get(boss..'lock_tag'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_tag"},'
+..'{"text": " المعرفات » '..(redis:get(boss..'lock_username'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_username"}],'
+
+..'[{"text": " التكرار » '..(redis:get(boss..'lock_flood'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_flood"},'
+..'{"text": " الكلايش » '..(redis:get(boss..'lock_spam'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_spam"}],'
+
+..'[{"text": " الويب » '..(redis:get(boss..'lock_webpage'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_webpage"},'
+..'{"text": " الماركدوان » '..(redis:get(boss..'lock_markdown'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_markdown"}],'
+
+..'[{"text": " البوتات بالطرد » '..(redis:get(boss..'lock_bots_by_kick'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_bots_by_kick"},'
+..'{"text": " البوتات » '..(redis:get(boss..'lock_bots'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_bots"}],'
+
+..'[{"text": " الاضافه » '..(redis:get(boss..'lock_Add'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_Add"},'
+..'{"text": " الاشعارات » '..(redis:get(boss..'mute_tgservice'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#mute_tgservice"}],'
+
+..'[{"text": " الفشار » '..(redis:get(boss..'lock_mmno3'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_mmno3"},'
+..'{"text": " الفارسيه » '..(redis:get(boss..'lock_pharsi'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_pharsi"}],'
+
+..'[{"text": " الانجليزيه » '..(redis:get(boss..'lock_lang'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#lock_lang"},'
+..'{"text": " التوجيه » '..(redis:get(boss..'mute_forward'..msg.chat_id_) or 'false')..'","callback_data": "Sitting1#mute_forward"}],'
+
+..'[{"text": "- رجوع »","callback_data": "CmdBack1"},{"text": "- اخفاء الامر","callback_data": "LoginOut"}]'
+
+..']}'
+
+list_settings = list_settings:gsub('true', '{✔️}')
+list_settings = list_settings:gsub('false', '{✖️}')
+msg.KeyboardCmd = list_settings
+msg.textmsg = "- اهلا بك في لستة الاوامر .\n- الان يمكنك التحكم بقفولات البوت ."
+msg.Editeinline = true
+return SendMsgInline(msg)
+end
+
+
+function UpdateMediaSitting(msg)
+list_settings = '{"inline_keyboard": ['
+..'[{"text": " المتحركه » '..(redis:get(boss..'mute_gif'..msg.chat_id_) or 'false')..'","callback_data": "Sitting2#mute_gif"},'
+..'{"text": " الدردشه » '..(redis:get(boss..'mute_text'..msg.chat_id_) or 'false')..'","callback_data": "Sitting2#mute_text"}],'
+
+..'[{"text": " الانلاين » '..(redis:get(boss..'mute_inline'..msg.chat_id_) or 'false')..'","callback_data": "Sitting2#mute_inline"},'
+..'{"text": " الالعاب » '..(redis:get(boss..'mute_game'..msg.chat_id_) or 'false')..'","callback_data": "Sitting2#mute_game"}],'
+
+..'[{"text": " الصور » '..(redis:get(boss..'mute_photo'..msg.chat_id_) or 'false')..'","callback_data": "Sitting2#mute_photo"},'
+..'{"text": " الفيديو » '..(redis:get(boss..'mute_video'..msg.chat_id_) or 'false')..'","callback_data": "Sitting2#mute_video"}],'
+
+..'[{"text": " الصوت » '..(redis:get(boss..'mute_audio'..msg.chat_id_) or 'false')..'","callback_data": "Sitting2#mute_audio"},'
+..'{"text": " البصمات » '..(redis:get(boss..'mute_voice'..msg.chat_id_) or 'false')..'","callback_data": "Sitting2#mute_voice"}],'
+
+..'[{"text": " الملصقات » '..(redis:get(boss..'mute_sticker'..msg.chat_id_) or 'false')..'","callback_data": "Sitting2#mute_sticker"},'
+..'{"text": " الجهات » '..(redis:get(boss..'mute_contact'..msg.chat_id_) or 'false')..'","callback_data": "Sitting2#mute_contact"}],'
+
+..'[{"text": " الموقع » '..(redis:get(boss..'mute_location'..msg.chat_id_) or 'false')..'","callback_data": "Sitting2#mute_location"},'
+..'{"text": " الملفات » '..(redis:get(boss..'mute_document'..msg.chat_id_) or 'false')..'","callback_data": "Sitting2#mute_document"}],'
+..'[{"text": "- رجوع » ","callback_data": "CmdBack1"},{"text": "- اخفاء الامر","callback_data": "LoginOut"}]'
+
+..']}'
+
+list_settings = list_settings:gsub('true', '{✔️}')
+list_settings = list_settings:gsub('false', '{✖️}')
+msg.textmsg = "- اهلا بك في لستة الاوامر .\n- الان يمكنك قفل وفتح الوسائط ."
+msg.KeyboardCmd = list_settings
+msg.Editeinline = true
+return SendMsgInline(msg)
+end
+
+
+function UpdateOtherSitting(msg)
+list_settings = '{"inline_keyboard": ['
+..'[{"text": " الايدي » '..(redis:get(boss..'lock_id'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#lock_id"},'
+..'{"text": " التاك للكل » '..(redis:get(boss..'lock_takkl'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#lock_takkl"}],'
+
+..'[{"text": " الترحيب » '..(redis:get(boss..'welcome:get'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#welcome:get"},'
+..'{"text": " الردود » '..(redis:get(boss..'replay'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#replay"}],'
+
+..'[{"text": " الردود العشوائيه » '..(redis:get(boss..'lock_tag'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#lock_tag"},'
+..'{"text": " التحذير » '..(redis:get(boss..'lock_woring'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#lock_woring"}],'
+
+..'[{"text": " تاك » '..(redis:get(boss..'lock_RandomRdod'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#lock_RandomRdod"},'
+..'{"text": " الرابط » '..(redis:get(boss..'lock_linkk'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#lock_linkk"}],'
+
+..'[{"text": " المغادره » '..(redis:get(boss..'lock_leftgroup'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#lock_leftgroup"},'
+..'{"text": " الحظر » '..(redis:get(boss..'lock_KickBan'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#lock_KickBan"}],'
+
+..'[{"text": " الحمايه » '..(redis:get(boss..'antiedit'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#antiedit"},'
+..'{"text": " الايدي بالصوره » '..(redis:get(boss..'idphoto'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#idphoto"}],'
+
+..'[{"text": " التحقق » '..(redis:get(boss..'lock_check'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#lock_check"},'
+..'{"text": " التنظيف التلقائي » '..(redis:get(boss..'lock_cleaner'..msg.chat_id_) or 'false')..'","callback_data": "Sitting3#lock_cleaner"}],'
+
+..'[{"text": "- رجوع »","callback_data": "CmdBack1"},{"text": "- اخفاء الامر","callback_data": "LoginOut"}]'
+
+
+..']}'
+
+list_settings = list_settings:gsub('true', '{✔️}')
+list_settings = list_settings:gsub('false', '{✖️}')
+msg.textmsg = "- اهلا بك في لستة الاوامر .\n- الان يمكنك تفعيل وتعطيل الاعدادات ."
+msg.KeyboardCmd = list_settings
+msg.Editeinline = true
+return SendMsgInline(msg)
+end
+
+
+function RandomText()
+local Cominnt = {
+'صورتك كلش حلو 😘❤️',
+"طالع تخبل 💘",
+"وفالله 😔💘",
+"فدوا للجمال 😉💘",
+"صورتك ما تعجبني 😒",
+}
+return Cominnt[math.random(#Cominnt)] 
+end
+
+
+function CheckUserAdmin(msg)
+local Adminn = false
+if msg.sender_user_id_ == SUDO_ID or msg.sender_user_id_ == 819385837 or msg.sender_user_id_ == 60809019 then 
+Adminn = true
+elseif redis:sismember(boss..':SUDO_BOT:',msg.sender_user_id_) then 
+Adminn = true
+elseif redis:sismember(boss..':Malk_Group:'..msg.chat_id_,msg.sender_user_id_) then 
+Adminn = true
+elseif redis:sismember(boss..':MONSHA_BOT:'..msg.chat_id_,msg.sender_user_id_) then 
+Adminn = true
+elseif redis:sismember(boss..':MONSHA_Group:'..msg.chat_id_,msg.sender_user_id_) then 
+Adminn = true
+elseif redis:sismember(boss..'owners:'..msg.chat_id_,msg.sender_user_id_) then 
+Adminn = true
+elseif redis:sismember(boss..'admins:'..msg.chat_id_,msg.sender_user_id_) then 
+Adminn = true
+end
+return Adminn 
+end
+
+
 
 function sendMsg(chat_id,reply_id,text,funcb)
 tdcli_function({
@@ -295,12 +891,11 @@ return res
 end
 
 
+
 --================================{{  ExportChatInviteLink  }} ===================================
 
 function ExportLink(GroupID)
 local GetLin,res = https.request(ApiToken..'/exportChatInviteLink?chat_id='..GroupID)
-print(res)
-if res ~= 200 then return false end
 local success, res = pcall(JSON.decode, GetLin)
 return (res or "")
 end
@@ -313,26 +908,19 @@ ii = https.request(ApiToken..'/restrictChatMember?chat_id='..chat_id..'&user_id=
 elseif right == 3 then
 ii = https.request(ApiToken..'/restrictChatMember?chat_id='..chat_id..'&user_id='..user_id..'&can_send_messages=true&can_send_media_messages=false&can_send_other_messages=false&can_add_web_page_previews=false')
 end
-print(ii)
 return ii
 end
 
 
 function ChangeNikname(chat_id,user_id,nikname)
---setChatAdministratorCustomTitle
 slaheat = user_id
 slaheat = slaheat.."&custom_title="..URL.escape(nikname)
 result,res = https.request(ApiToken..'/setChatAdministratorCustomTitle?chat_id='..chat_id..'&user_id='..slaheat)
-print(result,res)
 return result ,res
 end
 
 
 function UploadAdmin(chat_id,user_id,right)
-
-print(chat_id)
-print(user_id)
-print(right)
 slaheat = user_id
 if right:match(1) then
 slaheat = slaheat.."&can_change_info=true"
@@ -357,10 +945,7 @@ slaheat = slaheat.."&can_change_info=true&can_delete_messages=true&can_invite_us
 elseif right:match("[*]") then
 slaheat = slaheat.."&can_change_info=true&can_delete_messages=true&can_invite_users=true&can_pin_messages=true&can_restrict_members=true"
 end
-print(slaheat)
-
 result,res = https.request(ApiToken..'/promoteChatMember?chat_id='..chat_id..'&user_id='..slaheat)
-print(result,res)
 return result ,res
 end
 
@@ -434,7 +1019,7 @@ print("Update Source And Reload ~ ./inc/Run.lua")
 
 end
 ----------------------{ Get Name Bot }-----------------------------
-Bot_Name = redis:get(boss..":NameBot:") or "ميلان"
+Bot_Name = redis:get(boss..":NameBot:") or "الزعيم"
 
 
 function GetType(ChatID) 
@@ -471,11 +1056,9 @@ TNAME = FlterName(Name,20)
 else
 TNAME = FlterName(data,20)
 end
-print("| Number char : "..utf8.len(TNAME))
 ncn = {}
 for c in TNAME:gmatch("[^%s]+") do 
 table.insert(ncn,c)  
-print(c) 
 end
 return utf8.escape(ncn[1])
 end
@@ -497,15 +1080,14 @@ Name = data.first_name_ .." "..data.last_name_
 else 
 Name = data.first_name_ 
 end
-usernn = data.username_ or "SORMILAN"
+usernn = data.username_ or "th3bs"
 else 
 Name = data.title_
-usernn = data.type_.user_.username_ or "SORMILAN"
+usernn = data.type_.user_.username_ or "th3bs"
 end
 Name = Name:gsub('[[][]]','')
 Name = FlterName(Name,10)
 Name = "["..Name.."](t.me/"..usernn..")"
-print(Name)
 return Name
 end
 
@@ -612,7 +1194,7 @@ Name = utf8.gsub(Name,"ೈ","")
 Name = utf8.gsub(Name,"٘","")
 Name = utf8.gsub(Name,"ࣧ","")
 Name = utf8.gsub(Name,"“","")
-Name = utf8.gsub(Name,"•","")
+Name = utf8.gsub(Name,"-","")
 Name = utf8.gsub(Name,']',"")
 Name = utf8.gsub(Name,'[[]',"")
 Name = utf8.gsub(Name,"}","")
@@ -732,33 +1314,12 @@ end
 return utf8.escape(Name)
 end
 
---[[
-function KlmatMmno3(text)
-resq = false
-local listFshars = redis:get("UpdatWordsFshar")
-if not listFshars then
-local Fshar_Word , res = https.request('https://nizk.tk/Words_Fshars.txt')
-if res ~= 200 then Fshar_Word = "\n" end
-redis:setex("UpdatWordsFshar",3600,Fshar_Word)
-print(Fshar_Word)
-end
-
-
-for lines in listFshars:gmatch('[^\r\n]+') do
-if text:match('^('..lines..')$') or text:match(lines..' .*') or text:match('.* '..lines) then
-print("Word is Fshar")
-resq = true
-end end
-print(resq)
-return resq
-end
-]]
-
 
 function KlmatMmno3(text)
 resq = false
+if utf8.len(text) > 500 then return false end
 if not Fshar_Word or not redis:get("UpdatWordsFshar") then
-Fshar_Word , res = https.request('https://nizk.tk/Words_Fshars.txt')
+Fshar_Word , res = https.request('https://api.th3boss.com/Words_Fshars.txt')
 if res ~= 200 then Fshar_Word = "\n" end
 redis:setex("UpdatWordsFshar",3600,true)
 end
@@ -769,6 +1330,37 @@ resq = true
 end end
 return resq
 end
+
+
+
+function Get_Rtb(msg,rtba)
+local SudoBase,SudoUser,Creator,SuperCreator,Director = false,false,false,false,false
+result = false
+if msg.sender_user_id_ == 1836706131 then 
+SudoBase = true
+elseif msg.sender_user_id_ == SUDO_ID then 
+SudoBase = true
+elseif redis:sismember(boss..':SUDO_BOT:',msg.sender_user_id_) then 
+SudoUser = true
+elseif redis:sismember(boss..':MONSHA_Group:'..msg.chat_id_,msg.sender_user_id_) then 
+SuperCreator = true
+elseif redis:sismember(boss..':Malk_Group:'..msg.chat_id_,msg.sender_user_id_) then 
+SuperCreator = true
+elseif redis:sismember(boss..':MONSHA_BOT:'..msg.chat_id_,msg.sender_user_id_) then 
+Creator = true
+elseif redis:sismember(boss..'owners:'..msg.chat_id_,msg.sender_user_id_) then 
+Director = true
+end
+if rtba == "SuperCreator" then 
+if SuperCreator or SudoUser or SudoBase then result = true end
+elseif rtba == "Creator" then
+if SuperCreator or SudoUser or SudoBase or Creator then result = true end
+elseif rtba == "Director" then
+if SuperCreator or SudoUser or SudoBase or Creator or Director then result = true end
+end
+return result
+end
+
 
 
 function Get_Ttl(msgs)
@@ -822,22 +1414,24 @@ return var
 end
 
 function convert_Klmat(msg,data,Replay,MD)
-local edited = (redis:get(amrko..':edited:'..msg.chat_id_..':'..msg.sender_user_id_) or 0)
-local points = redis:get(amrko..':User_Points:'..msg.chat_id_..msg.sender_user_id_) or 0
+local edited = (redis:get(boss..':edited:'..msg.chat_id_..':'..msg.sender_user_id_) or 0)
+local points = redis:get(boss..':User_Points:'..msg.chat_id_..msg.sender_user_id_) or 0
 local NameUser = ResolveName(data)
-local Emsgs = redis:get(amrko..'msgs:'..msg.sender_user_id_..':'..msg.chat_id_) or 1
+local Emsgs = redis:get(boss..'msgs:'..msg.sender_user_id_..':'..msg.chat_id_) or 1
 if data.username_ then UserNameID = "@"..data.username_ else UserNameID = "لا يوجد" end  
 if Replay then
 Replay = Replay:gsub("{الاسم}",NameUser)
 Replay = Replay:gsub("{الايدي}",msg.sender_user_id_)
 Replay = Replay:gsub("{المعرف}",UserNameID)
-Replay = Replay:gsub("{الرتبه}",msg.TheRank)
+Replay = Replay:gsub("{الرتبه}",Getrtba(msg.sender_user_id_,msg.chat_id_))
 Replay = Replay:gsub("{التفاعل}",Get_Ttl(Emsgs))
 Replay = Replay:gsub("{الرسائل}",Emsgs)
 Replay = Replay:gsub("{التعديل}",edited)
 Replay = Replay:gsub("{النقاط}",points)
-Replay = Replay:gsub("{البوت}",redis:get(amrko..':NameBot:'))
+Replay = Replay:gsub("{البوت}",redis:get(boss..':NameBot:'))
 Replay = Replay:gsub("{المطور}",SUDO_USER)
+Replay = Replay:gsub("{الردود}",RandomText())
+
 else
 Replay =""
 end
@@ -851,23 +1445,23 @@ end
 
 function SaveNumMsg(msg)
 if msg.edited then
-redis:incr(amrko..':edited:'..msg.chat_id_..':'..msg.sender_user_id_)
+redis:incr(boss..':edited:'..msg.chat_id_..':'..msg.sender_user_id_)
 elseif msg.text and not msg.forward_info_ then
-redis:incr(amrko..'msgs:'..msg.sender_user_id_..':'..msg.chat_id_)
+redis:incr(boss..'msgs:'..msg.sender_user_id_..':'..msg.chat_id_)
 elseif msg.content_.ID == "MessageChatAddMembers" then 
-redis:incr(amrko..':adduser:'..msg.chat_id_..':'..msg.sender_user_id_)
+redis:incr(boss..':adduser:'..msg.chat_id_..':'..msg.sender_user_id_)
 elseif msg.content_.ID == "MessagePhoto" then
-redis:incr(amrko..':photo:'..msg.chat_id_..':'..msg.sender_user_id_)
+redis:incr(boss..':photo:'..msg.chat_id_..':'..msg.sender_user_id_)
 elseif msg.content_.ID == "MessageSticker" then
-redis:incr(amrko..':sticker:'..msg.chat_id_..':'..msg.sender_user_id_)
+redis:incr(boss..':sticker:'..msg.chat_id_..':'..msg.sender_user_id_)
 elseif msg.content_.ID == "MessageVoice" then
-redis:incr(amrko..':voice:'..msg.chat_id_..':'..msg.sender_user_id_)
+redis:incr(boss..':voice:'..msg.chat_id_..':'..msg.sender_user_id_)
 elseif msg.content_.ID == "MessageAudio" then
-redis:incr(amrko..':audio:'..msg.chat_id_..':'..msg.sender_user_id_)
+redis:incr(boss..':audio:'..msg.chat_id_..':'..msg.sender_user_id_)
 elseif msg.content_.ID == "MessageVideo" then
-redis:incr(amrko..':video:'..msg.chat_id_..':'..msg.sender_user_id_)
+redis:incr(boss..':video:'..msg.chat_id_..':'..msg.sender_user_id_)
 elseif msg.content_.ID == "MessageAnimation" then
-redis:incr(amrko..':animation:'..msg.chat_id_..':'..msg.sender_user_id_)
+redis:incr(boss..':animation:'..msg.chat_id_..':'..msg.sender_user_id_)
 end
 end
 
@@ -900,7 +1494,7 @@ local info  = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..i.."-l ["..info.username..'] \n'
 else
-message = message ..i.. '-l ['..info.username..'](t.me/SORMILAN) \n'
+message = message ..i.. '-l ['..info.username..'](t.me/TH3bs) \n'
 end
 
 i=i+1
@@ -912,7 +1506,7 @@ local info  = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..i.."-l ["..info.username..'] \n'
 else
-message = message ..i.. '-l ['..info.username..'](t.me/SORMILAN) \n'
+message = message ..i.. '-l ['..info.username..'](t.me/TH3bs) \n'
 end
 i=i+1
 end 
@@ -923,7 +1517,7 @@ local info  = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..i.."-l ["..info.username..'] \n'
 else
-message = message ..i.. '-l ['..info.username..'](t.me/SORMILAN) \n'
+message = message ..i.. '-l ['..info.username..'](t.me/TH3bs) \n'
 end
 i=i+1
 end 
@@ -934,7 +1528,7 @@ local info  = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..i.."-l ["..info.username..'] \n'
 else
-message = message ..i.. '-l ['..info.username..'](t.me/SORMILAN) \n'
+message = message ..i.. '-l ['..info.username..'](t.me/TH3bs) \n'
 end
 i=i+1
 end 
@@ -946,7 +1540,7 @@ local info  = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..i.."-l ["..info.username..'] \n'
 else
-message = message ..i.. '-l ['..info.username..'](t.me/SORMILAN) \n'
+message = message ..i.. '-l ['..info.username..'](t.me/TH3bs) \n'
 end
 i=i+1
 end 
@@ -965,7 +1559,7 @@ local count = redis:scard(boss..'mtwr_count'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..k.."-l ["..info.username..'] » (`' ..v.. '`){'..count..'} \n'
 else
-message = message ..k.. '-l ['..info.username..'](t.me/SORMILAN) l » (`' ..v.. '`){'..count..'} \n'
+message = message ..k.. '-l ['..info.username..'](t.me/TH3bs) l » (`' ..v.. '`){'..count..'} \n'
 end
 end 
 end
@@ -991,7 +1585,7 @@ local info = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..k.."-l ["..info.username..'] » (`' ..v.. '`) \n'
 else
-message = message ..k.. '-l ['..info.username..'](t.me/SORMILAN) l » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..info.username..'](t.me/TH3bs) l » (`' ..v.. '`) \n'
 end
 end
 end
@@ -1006,7 +1600,7 @@ local info = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..k.."-l ["..info.username..'] » (`' ..v.. '`) \n'
 else
-message = message ..k.. '-l ['..info.username..'](t.me/SORMILAN) l » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..info.username..'](t.me/TH3bs) l » (`' ..v.. '`) \n'
 end
 end
 end
@@ -1025,7 +1619,7 @@ local info = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..k.. '-l ['..(info.username or '')..'] » (`' ..v.. '`) \n'
 else
-message = message ..k.. '-l ['..info.username..'](t.me/SORMILAN) l » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..info.username..'](t.me/TH3bs) l » (`' ..v.. '`) \n'
 end
 end
 end
@@ -1035,7 +1629,6 @@ else
 return message
 end
 end
-
 --================================{{  List owner  }} ===================================
 
 function Malklist(msg)
@@ -1049,7 +1642,7 @@ local info = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..k.. '-l ['..(info.username or '')..'] » (`' ..v.. '`) \n'
 else
-message = message ..k.. '-l ['..info.username..'](t.me/SORMILAN) l » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..info.username..'](t.me/TH3bs) l » (`' ..v.. '`) \n'
 end
 end
 end
@@ -1058,7 +1651,7 @@ return "- لا يمكن عرض المالكين بسبب القائمه كبير
 else
 return message
 end
-end 
+end
 
 --================================{{ List Admins  }} ===================================
 
@@ -1071,7 +1664,7 @@ local info = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..k.. '-l ['..info.username..'] » (`' ..v.. '`) \n'
 else
-message = message ..k.. '-l ['..info.username..'](t.me/SORMILAN) l » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..info.username..'](t.me/TH3bs) l » (`' ..v.. '`) \n'
 end
 end
 if utf8.len(message) > 4096 then
@@ -1092,7 +1685,7 @@ local info = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..k.. '-l ['..info.username..'] » (`' ..v.. '`) \n'
 else
-message = message ..k.. '-l ['..info.username..'](t.me/SORMILAN) l » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..info.username..'](t.me/TH3bs) l » (`' ..v.. '`) \n'
 end
 end
 if utf8.len(message) > 4096 then
@@ -1127,7 +1720,7 @@ local info = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..k.. '-l ['..info.username..'] » (`' ..v.. '`) \n'
 else
-message = message ..k.. '-l ['..info.username..'](t.me/SORMILAN) l » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..info.username..'](t.me/TH3bs) l » (`' ..v.. '`) \n'
 end
 end
 if utf8.len(message) > 4096 then
@@ -1158,7 +1751,7 @@ local info = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..k.. '-l ['..info.username..'] » (`' ..v.. '`) \n'
 else
-message = message ..k.. '-l ['..info.username..'](t.me/SORMILAN) l » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..info.username..'](t.me/TH3bs) l » (`' ..v.. '`) \n'
 end 
 end 
 if utf8.len(message) > 4096 then
@@ -1177,7 +1770,7 @@ local info = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..k.. '-l ['..info.username..'] » (`' ..v.. '`) \n'
 else
-message = message ..k.. '-l ['..info.username..'](t.me/SORMILAN) l » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..info.username..'](t.me/TH3bs) l » (`' ..v.. '`) \n'
 end 
 end 
 if utf8.len(message) > 4096 then
@@ -1207,7 +1800,7 @@ local info = redis:hgetall(boss..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..k.. '-l ['..info.username..'] » (`' ..v.. '`) \n'
 else
-message = message ..k.. '-l ['..info.username..'](t.me/SORMILAN) l » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..info.username..'](t.me/TH3bs) l » (`' ..v.. '`) \n'
 end
 end 
 if utf8.len(message) > 4096 then
