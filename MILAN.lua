@@ -99,18 +99,18 @@ echo -e "\033[38;5;208m"
 echo -e "                                                  "
 echo -e "\033[0;00m"
 echo -e "\e[36m"
-./tg -s ./VENOM.lua -p PROFILE --bot=$token
+./tg -s ./MILAN.lua -p PROFILE --bot=$token
 done
 ]])  
 file:close()  
 file = io.open("DRG", "w")  
 file:write([[
 #!/usr/bin/env bash
-cd $HOME/VENOM
+cd $HOME/MILAN
 while(true) do
 rm -fr ../.telegram-cli
-screen -S VENOM -X kill
-screen -S VENOM ./VENOM
+screen -S MILAN -X kill
+screen -S MILAN ./MILAN
 done
 ]])  
 file:close() 
