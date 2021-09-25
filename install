@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd $HOME/VENOM
+cd $HOME/MILAN
 wget https://raw.githubusercontent.com/ahmedyad200/tg-file/master/tg
 install() {
 rm -rf $HOME/.telegram-cli
@@ -20,10 +20,10 @@ sudo apt-get install libstdc++6 -y
 sudo apt-get install lua-lgi -y
 sudo apt-get install libnotify-dev -y
 sudo chmod +x tg
-lua VENOM.lua
-sudo chmod +x VENOM
-sudo chmod +x ./DRG
-./DRG
+lua MILAN.lua
+sudo chmod +x MILAN
+sudo chmod +x ./MILAN
+./MILAN
 }
 if [ "$1" = "install" ]; then
 install
@@ -33,8 +33,8 @@ echo "Tg Is Not Found"
 exit 1
 fi
 sudo chmod +x tg
-lua VENOM.lua
-sudo chmod +x VENOM
-sudo chmod +x ./DRG
-./DRG
+lua MILAN.lua
+sudo chmod +x MILAN
+sudo chmod +x ./MILAN
+./MILAN
 fi
