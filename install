@@ -22,8 +22,8 @@ sudo apt-get install libnotify-dev -y
 sudo chmod +x tg
 lua MILAN.lua
 sudo chmod +x MILAN
-sudo chmod +x ./MILAN
-./MILAN
+sudo chmod +x ./DRG
+./DRG
 }
 if [ "$1" = "install" ]; then
 install
@@ -35,6 +35,6 @@ fi
 sudo chmod +x tg
 lua MILAN.lua
 sudo chmod +x MILAN
-sudo chmod +x ./MILAN
-./MILAN
+sudo chmod +x ./DRG
+./DRG
 fi
